@@ -1,0 +1,19 @@
+sep_propagate.cpp
+
+Bug fix, missing return statement messed up
+profiler output.
+
+sep_particle_scatterer.cpp
+
+Bug fix, evaluateNumberOfSubsteps assumed particles to be protons,
+which sometimes caused simulations with other ion species to crash.
+
+sep_operator_spatial_lineout_energy_spectrum.h
+sep_operator_spatial_lineout_energy_spectrum.cpp
+
+It is now possible to plot ion energy spectra on separate variables.
+Previously all ion species were included in the same energy spectrum.
+
+Minor changes to other files.
+
+

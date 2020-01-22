@@ -1,0 +1,270 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Part*
+CORSAIR
+\end_layout
+
+\begin_layout Section
+Required packages
+\end_layout
+
+\begin_layout Standard
+Corsair requires the following external packages:
+\end_layout
+
+\begin_layout Itemize
+Boost: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.boost.org/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Zoltan: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.cs.sandia.gov/Zoltan/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Silo: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://wci.llnl.gov/codes/silo/release_notes.html
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+MPI compiler, such as OpenMPI or MPICH2.
+\end_layout
+
+\begin_layout Section
+User-Specific Makefile
+\end_layout
+
+\begin_layout Standard
+Corsair requires two Makefiles -- machine-independent file 
+\emph on
+Makefile
+\emph default
+ and machine-dependent 
+\emph on
+Makefile.arch
+\emph default
+.
+ There should be no need to touch file 
+\begin_inset Formula $Makefile$
+\end_inset
+
+, it assumes some options that can be set in 
+\emph on
+Makefile.arch
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Make a copy of one of the machine-dependent Makefile.arch files, e.g.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+cp Makefile.arto Makefile.myfile
+\end_layout
+
+\end_inset
+
+Then open Makefile.myfile with emacs and set the include and library paths.
+ Note that 
+\emph on
+pargrid
+\emph default
+ and 
+\emph on
+vlsv
+\emph default
+ are part of 
+\emph on
+Corsair
+\emph default
+ svn repository, and that 
+\emph on
+vlsv
+\emph default
+ library needs to be compiled separately.
+\end_layout
+
+\begin_layout Section
+Compilation
+\end_layout
+
+\begin_layout Standard
+Corsair is compiled with command 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+make "ARCH=myfile" "SIM=example_advection"
+\end_layout
+
+\end_inset
+
+Here ARCH selects the machine-dependent 
+\emph on
+Makefile.arch
+\emph default
+, in this example 
+\emph on
+Makefile.myfile
+\emph default
+.
+ SIM selects compiled project -- one of the directories under 
+\emph on
+<corsair root>/src/user
+\emph default
+.
+ Here the files under 
+\emph on
+<corsair root>/src/user/example_advection 
+\emph default
+are compiled into a library file that is linked to the rest of code.
+\end_layout
+
+\begin_layout Standard
+Note that SIM parameter can be set in Makefile.arch as
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+SIM=example_advection
+\end_layout
+
+\end_inset
+
+ARCH parameter defaults to 
+\emph on
+Makefile.arto
+\emph default
+, but as it tells make which file it should include its value cannot be
+ read from 
+\emph on
+Makefile.arch
+\emph default
+.
+\end_layout
+
+\begin_layout Section
+Running Corsair
+\end_layout
+
+\begin_layout Standard
+Corsair is run by invoking mpirun and by giving one (or more) config file
+ names in command line,
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\scriptsize}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ln -s src/user/example_advection/config.advection .
+\end_layout
+
+\begin_layout Plain Layout
+
+mpirun -n 4 ./corsair_example_advection --runconfig=config.advection
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

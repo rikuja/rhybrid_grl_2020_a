@@ -1,0 +1,189 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00000500.vlsv
+
+[Simulation]
+time_initial = 0.0
+maximum_time = -10000.0
+maximum_timesteps = 100
+dt = 0.005
+data_save_interval = 10
+data_save_interval_unit = timestep
+particle.species = Proton
+maximum_load_imbalance = 0.9
+repartition_check_interval = 10
+random_number_generator.seed = 0
+restart_write_interval = 500
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+#restart = yes
+mesh_always_written = yes
+
+[LoadBalance]
+methods = HSFC
+#methods = RANDOM
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = cylindrical
+x_periodic = no
+y_periodic = yes
+z_periodic = no
+x_min = +1000000.0
+y_min = 0.0
+z_min = -6000000.0
+x_max = +6000000.0
+y_max = +6.283185307
+z_max = +6000000.0
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+x_size = 12
+y_size = 32
+z_size = 5
+x_units = m
+y_units = m
+z_units = m
+x_label = r-axis
+y_label = phi-axis
+z_label = z-axis
+
+[cylindrical]
+field = CylindricalLineCurrent
+
+[SEP]
+propagate_alfven_waves = no
+alfven_wave_growth = no
+scatter_particles = no
+include_antiparallel_alfven_waves = yes
+include_parallel_alfven_waves = yes
+setup_timesteps = 0
+timestep_recalculate_interval = 1
+include_shock = no
+
+[WavelengthMesh]
+lambda_min = -5.0e7
+lambda_max = +5.0e7
+cell_spacing = uniform
+size = 40
+
+[CylindricalLineCurrent]
+B_reference = 1.0e-8
+R_reference = 1.0e6
+mass_density = 1.1711e-22
+#mass_density = 1.0
+B_axial = 0.0
+
+[ReducedScalar]
+slice_index = 10
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+variable = waveGrowth
+
+[WavelengthMeshOperator]
+slices = 3
+sliced_coordinate = z
+sliced_coordinate = x
+sliced_coordinate = y
+slice_origin = 1.0
+slice_origin = 5e6
+slice_origin = 0.0
+
+[WavelengthMeshVariables]
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+variable = waveGrowth
+
+[WavelengthMeshParticleOperator]
+all_species = yes
+species = Proton
+
+[AlfvenMeshAP]
+direction = -1
+injector.name = LagrInjectorDefault
+injector.parameters = AlfvenInjectorAP
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenMesh]
+direction = +1
+injector.name = LagrInjectorDefault
+injector.parameters = AlfvenInjector
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenInjector]
+macroparticles_per_cell = 1
+initial_injection = yes
+inflow_boundary_injection = no
+energy_spectrum = PowerLaw
+energy_spectrum_parameters = AlfvenSpectrumPar
+
+[AlfvenInjectorAP]
+macroparticles_per_cell = 1
+initial_injection = yes
+inflow_boundary_injection = no
+energy_spectrum = PowerLaw
+energy_spectrum_parameters = AlfvenSpectrumAntipar
+
+[AlfvenSpectrumPar]
+relative_energy_L = 0.001
+relative_energy_R = 0.001
+spectral_index_L = 2.0
+spectral_index_R = 2.0
+ref_resonant_energy_L = 1.0
+ref_resonant_energy_R = 1.0
+max_resonant_energy_L = 10.0
+max_resonant_energy_R = 10.0
+
+[AlfvenSpectrumAntipar]
+relative_energy_L = 0.001
+relative_energy_R = 0.001
+spectral_index_L = 1.6667
+spectral_index_R = 1.6667
+ref_resonant_energy_L = 1.0
+ref_resonant_energy_R = 1.0
+max_resonant_energy_L = 10.0
+max_resonant_energy_R = 10.0
+
+[Proton]
+mass = 1.0
+charge = 1.0
+injector.name = IonInjectorHomog
+injector.parameters = ProtonInjector
+accumulator.name = IonAccumulator
+accumulator.parameters =
+propagator.name = ParticlePropagator
+propagator.parameters =
+boundary_condition.name = IonBoundaryCondRemove
+boundary_condition.parameters =
+
+[ProtonInjector]
+energy_distribution = mono
+energy_distribution_parameters = ProtonEnergyDistribution
+pitch_distribution = isotropic
+pitch_distribution_parameters = ProtonPitchDistribution
+macroparticles_per_cell = 1
+number_density = 1e6
+position_x = 3000000.0
+position_y = 1.0
+position_z = 1.0
+
+[ProtonEnergyDistribution]
+injection_energy = 0.5
+units = keV
+
+[ProtonPitchDistribution]
+injection_pitch = 0.75

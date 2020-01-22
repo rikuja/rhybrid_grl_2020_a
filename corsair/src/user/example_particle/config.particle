@@ -1,0 +1,129 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00000100.vlsv
+
+[Simulation]
+time_initial = 0.0
+maximum_time = -1
+maximum_timesteps = 200
+dt = 10.0
+data_save_interval = 10
+data_save_interval_unit = timestep
+particle.species = proton
+maximum_load_imbalance = 1.2
+repartition_check_interval = 10
+random_number_generator.seed = 1
+restart_write_interval = 50
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+#restart = yes
+mesh_always_written = yes
+
+[LoadBalance]
+methods = RCB
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = cartesian
+x_periodic = yes
+y_periodic = yes
+z_periodic = yes
+x_min = -382260000.0
+y_min = -382260000.0
+z_min = -382260000.0
+x_max = +382260000.0
+y_max = +382260000.0
+z_max = +382260000.0
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+x_size = 10
+y_size = 10
+z_size = 10
+x_units = m
+y_units = m
+z_units = m
+x_label = x-axis
+y_label = y-axis
+z_label = z-axis
+
+[OperatorPargridData]
+array_pargrid_name = density
+array_output_name = scalars/numberDensity
+array_units = 1/m^3
+
+[proton]
+mass_unit = MASS_PROTON
+charge_unit = CHARGE_ELEMENTARY
+mass = 1.0
+charge = +1.0
+boundary_condition.name = BoundaryCondRemove
+boundary_condition.parameters =
+injector.name = DefaultInjector
+injector.parameters = ProtonPowerLaw
+propagator.name = RK2GC
+propagator.parameters =
+accumulator.name = Accumulator
+accumulator.parameters =
+type = GC
+
+[DataOperatorExcludes]
+exclude_list = 
+
+[PitchBinner]
+bins = 7
+divide_by_bin_width = no
+
+[EnergyBinner]
+binners = 1
+0.energy_unit = keV
+0.energy_per_amu = no
+0.divide_by_bin_width = no
+0.name = LEP
+0.channels = 0.00 2.00
+0.channels = 2.00 4.00
+0.channels = 4.00 6.00
+0.channels = 6.00 8.00
+0.channels = 800.00 1000.00
+0.channels = 10.00 12.00
+0.channels = 12.00 14.00
+0.channels = 14.00 20.00
+0.channel_names = 00_02
+0.channel_names = 02_04
+0.channel_names = 04_06
+0.channel_names = 06_08
+0.channel_names = 08_10
+0.channel_names = 10_12
+0.channel_names = 12_14
+0.channel_names = 14_20
+0.particle_species = proton
+
+[ProtonPowerLaw]
+particles_per_cell = 20
+number_density = 7.0e6
+distribution_energy = powerlaw
+distribution_pitch = isotropic
+spectral_index = -1.5
+energy_unit = keV
+energy_min = 1.0
+energy_max = 100.0
+energy = 10.0
+pitch = 0.75
+origin_x = 10.0
+origin_y = 10.0
+origin_z = 10.0
+
+[ConstantB]
+magnitude = 4.7e-9
+direction_x = -0.945518576
+direction_y = +0.318453709
+direction_z = +0.067689425
+
+[SolarWindFields]
+magnitude = 4.7e-9
+direction_x = +0.0
+direction_y = +0.0
+direction_z = +1.0
+speed = 0.0

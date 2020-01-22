@@ -1,0 +1,281 @@
+*************************************
+***** CHANGES IN REVISION 00676 *****
+*************************************
+
+MINOR
+
+DataOperatorContainer was moved to struct ObjectWrapper, and
+consequently is no longer passed as a parameter to user-defined
+registerDataOperators function.
+
+*************************************
+***** CHANGES IN REVISION 00604 *****
+*************************************
+
+MAJOR
+
+MINOR
+
+Modified profiler to show a bit more useful information.
+
+Modified Corsair kernel to write min/max/avg computational load
+information to "timeseries_loads.txt" file.
+
+*************************************
+***** CHANGES IN REVISION 00582 *****
+*************************************
+
+MAJOR
+
+Added a new file src/include/main.h that contains a wrapper for
+various classes in simulation, and a function for obtaining it. It is
+much cleaner to get structs Simulation and SimulationClasses, say,
+this way than to pass them as initializer parameters.
+
+Eventually initializer parameters in various places should be removed,
+and classes should get the object wrapper using the new function.
+Struct SimulationClasses can be removed eventually.
+
+Particle accumulator, boundary condition, injector, and propagator
+names and related configuration file regions can now be queried from
+ParticleListBase class. These methods are useful for testing purposes.
+
+*************************************
+***** CHANGES IN REVISION 00xxx *****
+*************************************
+
+MINOR
+
+Added a new user-specified function 'userRunTests' to Corsair kernel.
+This function is called when test suite is run (selected in config
+file).
+
+DataOperatorContainer now reads an exclude list from config file,
+i.e., user can put names of DataOperators there that should not be
+called during the simulation. This makes it easier to prevent
+compute-intensive or unneeded DataOperators from being called without
+having to touch the source code and recompile.
+
+Exclude list is defined in config file region
+[DataOperatorExcludes]
+exclude_list = <operator name>
+exclude_list = <operator name>
+...
+
+where "exclude_list" contains the names of blacklisted / excluded
+DataOperators.
+
+*************************************
+***** CHANGES IN REVISION 00517 *****
+*************************************
+
+MAJOR
+
+Particle accumulator, injector, and propagator are no longer given as
+template parameters to particle list. They must be registered to their
+respective object factories instead. The process is very similar to
+what was already used with GridBuilders. Particle list reads the names
+of aforementioned classes from config file and attempts to get them 
+from object factories. This allows one to change, say, accumulator,
+just by changing a parameter in config file -- previously this
+required at least commenting out some code lines and recompiling.
+These changes make it very easy to run the simulation in different
+geometries.
+
+There are now virtual base classes ParticleAccumulatorBase,
+ParticleInjectorBase, and ParticlePropagatorBase, that define the
+interfaces to aforementioned classes.
+
+Files from src/particleinjector and src/particlepropagator have been
+moved to src/user/example_particle.
+
+Particle boundary condition functions were also virtualized in a
+similar manner to accumulators, injectors, and propagators. There is a
+base class that defines the interface that every user-defined boundary
+condition class must implement.
+
+Fixed a bug in src/kernel/Makefile that prevented compilation.
+
+Renamed sphere_triangulated.* files to triangulated_sphere.* and added
+functions for creating triangulated planar surfaces.
+
+Fixed a bug in src/include/linear_algebra.h: matrixIndex function
+indexed array incorrectly, i.e., i actually indexed columns and j rows.
+
+*************************************
+***** CHANGES IN REVISION 00503 *****
+*************************************
+
+MINOR
+
+Added a generic DataOperator OperatorPargridArray that can be used to
+write ParGrid data arrays to output files. OperatorPargridArray reads
+the (ParGrid) names of the arrays, their output names (as displayed in
+VisIt, and units from configuration file.
+
+*************************************
+***** CHANGES IN REVISION 00500 *****
+*************************************
+
+MINOR
+
+Added "simclean" target to Makefile. The difference to "clean" is that
+"simclean" calls "make clean" only on the user-specified simulation
+directory. For example,
+
+> make "SIM=hyb" simclean
+
+invokes "make clean" on src/user/hyb directory and removes
+src/lib/libhyb.a library file.
+
+*************************************
+***** CHANGES IN REVISION 00441 *****
+*************************************
+
+MAJOR
+
+Improved cylindrical and spherical meshes created by
+LogicallyCartesian grid builder. Ghost zones are now written to VLSV
+files over periodic phi boundaries. VisIt plugin has also been
+improved in cylindrical and spherical mesh geometries.
+
+MINOR
+
+LogicallyCartesian grid builder now reads axis labels and units from
+config file, and writes them to output VLSV files.
+
+Fixed a bug in getBlockCoordinateArray function (defined in
+simulationclasses.h). It now calculates correct i,j,k indices for
+blocks.
+
+Changed variable names in Simulation struct: x_crds_cell is now
+x_crds_node etc. These arrays always contained node coordinates.
+
+*************************************
+***** CHANGES IN REVISION 00417 *****
+*************************************
+
+MAJOR
+
+Implemented new GridBuilder that creates logically cartesian
+curvilinear meshes. It writes new multi-domain unstructured VLSV mesh
+files (CORSAIR-99 CORSAIR-100 CORSAIR-102).
+
+Simulation struct has pointers to several arrays that are used to
+calculate mesh block sizes and cell sizes as well as node coordinates.
+These were added to support stretched logically Cartesian meshes, the
+values of these arrays must be set by class GridBuilder (CORSAIR-102).
+
+simulationclasses.h file has several new helper functions, under
+namespace block, that can be used to fetch mesh block sizes, cell
+sizes, etc (CORSAIR-102 CORSAIR-107).
+
+Moved mesh writing to GridBuilder virtual function as this is more
+logical place for it (CORSAIR-105).
+
+MINOR CHANGES
+
+definitions.h file has a preprocessor macro for defining restricted
+pointers.
+
+Removed struct Simulation::block_dx0 etc. variables, these were
+replaces by the new arrays mentioned above (CORSAIR-102).
+
+File I/O throughput is recorded in logfile (CORSAIR-106).
+
+*************************************
+***** CHANGES IN REVISION 00290 *****
+*************************************
+
+MAJOR CHANGES
+
+Implemented restarting.
+
+*************************************
+***** CHANGES IN REVISION 00257 *****
+*************************************
+
+MAJOR CHANGES
+
+----- ParticleList -----
+
+ParticleList performance has been significantly improved. Hole
+removing algorithm has been replaced by a more intelligent iteration
+over particles in ParticleList::propagateCell function. Particles do
+not need to store their cell IDs any longer.
+
+ParGrid now has an array that stores the local IDs of cells. This
+array is valid for remote cells as well. ParticleList now uses this
+list to tell neighbour processes where the sent particles should be
+copied to. This improved the performance of 
+ParticleList::copyParticlesFromBuffer function.
+
+Several std::map variables/searches have been replaced by std::vectors
+or eliminated altogether, improving the performance further.
+
+Using rectcuboid case as a benchmark, a 96x96x96 simulation with 200
+particles per cell and 120 processes in short queue now takes only 
+63.3% of the time required by older code version.
+
+----- ParticleList -----
+
+Class ParticleList has been replaced by virtual base class
+ParticleListBase, and its implementation in ParticleListSkeleton. The
+new system works with different types of particle species, i.e. each
+ParticleListSkeleton may propagate different particle species. New
+implementation is as fast as the old ParticleList (with improvements
+discussed above). This change caused a lot of changes in many files.
+
+MINOR CHANGES
+
+Project "src/user/rectcuboid" has been replaced with
+"src/user/example_particle".
+
+DataOperator "EnergyBinner" has been removed.
+"src/dataoperators/energy_binner_2nd.h" can now accumulate particles
+with 0/1/2 order shape clouds.
+
+User projects have been updated to use new particle lists.
+
+Particle injectors in src/particleinjector, and propagators in
+src/particlepropagator, are now properly templatized.
+
+*************************************
+***** CHANGES IN REVISION 00226 *****
+*************************************
+
+MAJOR CHANGES
+
+Significant change to cell.h class. Static and dynamic data are now
+allocated through ParGrid. Thus, class Cell does not allocate
+variables any longer.
+
+This change concerns the way particles are stored. Previously they were 
+stored in vectors in Cell, now ParticleList allocates them in a
+ParGrid dynamic data array.
+
+Cell/block coordinates were also stored in Cell. Now Gridbuilder
+allocates a ParGrid static data array for them. Coordinate array can
+be accessed, for example, via getBlockCoordinateArray function defined
+in simulationclasses.h file. Note that the array now contains all
+cell/block coordinates, i.e. one has to index the array correctly in order
+to get the bottom lower left corner coordinates of a cell with local
+id blockID:
+
+const double* crds = getBlockCoordinateArray(sim,simClasses)
+crds[3*blockID + 0]    // x-coordinate
+crds[3*blockID + 1]    // y-coordinate
+crds[3*blockID + 2]    // z-coordinate
+
+ParGrid DataID of the coordinate array is stored in
+Simulation::crdsDataID variable which also can be used to access the array
+via ParGrid functions.
+
+Note that cell coordinates MUST BE defined as doubles (previously
+these were of type Real). This is a requirement coming from ParGrid,
+which needs cell coordinates for some load balancing methods.
+
+MINOR CHANGES
+
+ParticleList::propagateCell performance has been increased by about 5%
+for "rectcuboid" project, and hole removing is now about 30% faster.

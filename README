@@ -1,0 +1,55 @@
+Compile the Zoltan libray (v3.6 or compatible version) in the
+$HOME/bin/Zoltan_v3.6/ folder.
+
+Place the following source code folders also in $HOME/bin/:
+
+analysator
+corsair
+pargrid
+rhybrid
+vlsv
+
+These are the following versions from repositories on
+https://github.com/fmihpc:
+
+analysator: aa4d0b04637bb137cc5ea6cae843a579bd46f8f9
+corsair: 31646d4d082cce88613b218229189ea2cdf55725
+pargrid: f3d0c9ea45940905a5a47cf4d8008eeb83ec3bf7
+rhybrid: ee02a51c0c24ef246ad6557043a85ed462fbddae
+vlsv: 2ce44e8550a9438678115ae5b16d26f14075c29e
+
+Edit vlsv/Makefile* files as necessary for your system and compile the
+VLSV library:
+
+cd $HOME/bin/vlsv/
+make
+
+Place the RHybrid files under the Corsair directory tree:
+
+mkdir $HOME/bin/corsair/src/user/rhybrid/
+cp -p $HOME/bin/rhybrid/src/* $HOME/bin/corsair/src/user/rhybrid/
+
+For Run01 (nominal case) set USE_DETECTORS := true in
+$HOME/bin/corsair/src/user/rhybrid/Makefile
+
+For Run02 (perp. IMF case) set USE_DETECTORS := false in
+$HOME/bin/corsair/src/user/rhybrid/Makefile
+
+Edit corsair/Makefile* files as necessary for your system and compile
+the Corsair platform:
+
+cd $HOME/bin/corsair/
+make
+
+Perform runs with mpirun or the batch job system:
+
+mkdir run01
+cd run01
+cp -p ../../run_cfg_files/run01* ./
+mpirun -np 2 ../corsair_rhybrid --runconfig run01_venus_nominal.cfg
+
+You can use the Analysator Python tool to examine the output files and
+explained in $HOME/bin/analysator/Documentation/ or use the VisIt
+(https://wci.llnl.gov/simulation/computer-codes/visit/) software
+plugin on $HOME/bin/vlsv/visit-plugin/.
+

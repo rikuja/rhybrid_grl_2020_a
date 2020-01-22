@@ -1,0 +1,307 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00000100.vlsv
+
+[Simulation]
+time_initial = 0.0
+maximum_time = -1800
+#maximum_timesteps = -100
+maximum_timesteps = 0
+dt = 0.025
+data_save_interval = 60
+#data_save_interval_unit = timestep
+data_save_interval_unit = time
+maximum_load_imbalance = 1.1
+repartition_check_interval = 50
+random_number_generator.seed = 0
+restart_write_interval = 0
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+#restart = yes
+mesh_always_written = yes
+#particle.species = Proton
+particle.species = 
+run_tests = yes
+
+[LoadBalance]
+#methods = RCB
+methods = BLOCK
+#methods = RANDOM
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = spherical
+x_periodic = no
+y_periodic = yes
+z_periodic = no
+x_min = +1.0
+y_min = +1.483529864
+z_min = -0.1745
+#x_max = +2.6
+x_max = +15.0
+y_max = +1.658062789
+z_max = +0.785398163397
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+#x_size = 50
+x_size = 45
+y_size = 1
+z_size = 20
+x_units = m
+y_units = m
+z_units = m
+x_label = r-axis
+y_label = theta-axis
+z_label = phi-axis
+input_units = RS
+
+[SEP]
+include_antiparallel_alfven_waves = no
+include_parallel_alfven_waves = no
+propagate_alfven_waves = no
+alfven_wave_growth = no
+scatter_particles = no
+setup_time = 0.0
+shock_time = 0.0
+timestep_recalculate_interval = 10
+timestep_particle_factor = 0.5
+timestep_maximum = 10.0
+shock_name = Spherical
+parallel_wavelength_scaler = Radius2
+antiparallel_wavelength_scaler = none
+
+[Shock.accelerator]
+phi_factor = 0.08
+
+[Shock.spherical]
+length_units = RS
+initial_radius = 0.3
+centroid_x = 1.3
+centroid_y = 1.570796327
+centroid_z = 0.0
+#expansion_speed = 000000.0
+expansion_speed = 750000.0
+propagation_speed = 1600000.0
+#propagation_speed = 0.0
+propagation_direction_x = 1.0
+propagation_direction_y = 0.0
+propagation_direction_z = 0.0
+shock_model = oblique
+#shock_model = perpendicular
+#shock_model = constant
+gas_compression_ratio = 3.0
+magnetic_compression_ratio = 3.0
+cruising_time = 1200.0
+
+[spherical]
+field = SphericalMann
+
+[WavelengthMesh]
+#lambda_min = -0.15e10
+#lambda_max = +0.15e10
+lambda_min = -1e5
+lambda_max = +1e5
+cell_spacing = uniform
+size = 80
+
+[SphericalMann]
+radial_B = 5.0e-9
+radial_velocity = 425000.0
+number_density = 6.59e+06
+temperature = 1.0e+06
+mean_molecular_weight = 0.6
+reference_radius = 1.0
+distance_units = AU
+polytropic_index = 1.666667
+
+[DataOperatorExcludes]
+#exclude_list = ShockMeshElectrons
+#exclude_list = SpatialLineoutEnergySpectrum
+
+[DataOperators.ShockElectrons]
+energy_distribution = kappa
+energy_distribution_parameters = ElectronEnergyDistribution
+injection_speed_max = 4e7
+display_speed_min = -1.0e6
+display_speed_max = +2.0e7
+pitch_samples = 300
+speed_samples = 300
+supersamples_phi = 2
+
+[EnergyChannels]
+instrument_names = LEP
+instrument_names = HEP
+
+LEP.energy_units = keV
+LEP.energy_per_amu = yes
+LEP.divide_by_bin_width = yes
+LEP.energy_limits = 1.0 10.0
+LEP.energy_limits = 10.0 100.0
+LEP.energy_limits = 100.0 1000.0
+LEP.energy_limits = 1000.00 10000.0
+LEP.channel_names = 01_10
+LEP.channel_names = 10_100
+LEP.channel_names = 100_1000
+LEP.channel_names = 1000_10000
+LEP.species_names = Proton
+
+HEP.energy_units = MeV
+HEP.energy_per_amu = yes
+HEP.divide_by_bin_width = yes
+HEP.energy_limits = 1.0 3.0
+HEP.energy_limits = 3.0 5.0
+HEP.energy_limits = 5.0 7.0
+HEP.energy_limits = 7.0 10.0
+HEP.energy_limits = 10.0 20.0
+HEP.channel_names = 01_03
+HEP.channel_names = 03_05
+HEP.channel_names = 05_07
+HEP.channel_names = 07_10
+HEP.channel_names = 10_20
+HEP.species_names = Proton
+
+[WavelengthMeshOperator]
+slices = 3
+sliced_coordinate = z
+sliced_coordinate = x
+sliced_coordinate = y
+slice_origin = 1.0
+slice_origin = 1.0
+slice_origin = 1.571
+
+[ReducedScalar]
+slice_index = 0
+
+[WavelengthMeshVariables]
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+#variable = waveGrowth
+variable = antiparWaveGrowth
+variable = parWaveGrowth
+
+[AlfvenMeshAP]
+direction = -1
+injector.name = LagrInjectorNgReames1994
+injector.parameters = AlfvenInjectorAP
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenMesh]
+direction = +1
+injector.name = LagrInjectorNgReames1994
+injector.parameters = AlfvenInjector
+#injector.name = LagrInjectorDefault
+#injector.parameters = AlfvenInjector
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenInjectorAP]
+macroparticles_per_cell = 1
+reference_radius = 1.0
+reference_radius_units = AU
+reference_resonant_energy_per_amu = 1.0
+energy_units = MeV
+spectral_k_index = -1.5
+intensity_L = 1.0e16
+intensity_R = 1.0e16
+initial_state_injection = no
+
+[AlfvenInjector]
+macroparticles_per_cell = 1
+initial_state_injection = no
+resolution_lambda = 2
+resolution_r = 5
+energy_spectrum = PowerLaw
+energy_spectrum_parameters = AlfvenSpectrumPar
+min_injection_wavelength = -6e5
+max_injection_wavelength = +6e5
+
+[AlfvenSpectrumPar]
+relative_energy_L = 1.0e-4
+relative_energy_R = 1.0e-4
+spectral_index_L = 1.6667
+spectral_index_R = 1.6667
+ref_resonant_energy_L = 1.0
+ref_resonant_energy_R = 1.0
+max_resonant_energy_L = 35000000.0
+max_resonant_energy_R = 35000000.0
+
+[Proton]
+mass = 1.0
+charge = 1.0
+#injector.name = IonInjectorHomog
+injector.name = IonInjectorNgReames1994
+injector.parameters = ProtonInjector
+accumulator.name = IonAccumulator
+accumulator.parameters =
+#propagator.name = ParticlePropagator
+propagator.name = ParticlePropagatorCoronal
+propagator.parameters =
+boundary_condition.name = IonBoundaryCondShock
+boundary_condition.parameters =
+
+[ProtonInjector]
+macroparticles_per_cell = 5000
+#macroparticles_per_cell = 1
+injection_propagator_name = ParticlePropagator
+energy_distribution = kappa
+energy_distribution_parameters = ProtonEnergyDistribution
+energy_per_nucleon = yes
+relative_abundance = 1.0
+
+[ProtonEnergyDistribution]
+MB_relative_energy_min = 1160
+MB_relative_energy_max = 11600
+#relative_injection_energy_min = 0
+#relative_injection_energy_max = 2000
+spectral_index = 2.0
+units = eV
+
+[ProtonPitchDistribution]
+injection_pitch = -0.25
+
+[ElectronEnergyDistribution]
+MB_relative_energy_min = 0
+MB_relative_energy_max = 10000
+spectral_index = 3.0
+
+[Iron]
+mass = 56.0
+charge = 11.0
+#injector.name = IonInjectorHomog
+injector.name = IonInjectorNgReames1994
+injector.parameters = IronInjector
+accumulator.name = IonAccumulator
+accumulator.parameters =
+#propagator.name = ParticlePropagator
+propagator.name = ParticlePropagatorCoronal
+propagator.parameters =
+boundary_condition.name = IonBoundaryCondShock
+boundary_condition.parameters =
+
+[IronInjector]
+macroparticles_per_cell = 5000
+injection_propagator_name = ParticlePropagator
+energy_distribution = kappa
+energy_distribution_parameters = IronEnergyDistribution
+energy_per_nucleon = yes
+relative_abundance = 1.56e-4
+
+[IronEnergyDistribution]
+MB_relative_energy_min = 1160
+MB_relative_energy_max = 23200
+spectral_index = 2.0
+units = eV
+

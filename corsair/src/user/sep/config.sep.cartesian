@@ -1,0 +1,279 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00040000.vlsv
+
+[Simulation]
+time_initial = 0.0
+maximum_time = -1.0
+#maximum_timesteps = 3000
+maximum_timesteps = 0
+dt = 0.1
+data_save_interval = 100
+data_save_interval_unit = timestep
+maximum_load_imbalance = 0.9
+repartition_check_interval = 100
+random_number_generator.seed = 0
+#random_number_generator.seed = 1397608683
+restart_write_interval = 30000
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+restart = no
+mesh_always_written = yes
+run_tests = yes
+particle.species = Proton
+#particle.species = 
+
+[LoadBalance]
+methods = RANDOM
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = cartesian
+x_periodic = yes
+y_periodic = yes
+z_periodic = yes
+x_min = -0.1
+y_min = -0.1
+z_min = -0.1
+x_max = +0.1
+y_max = +0.1
+z_max = +0.1
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+x_size = 10
+y_size = 1
+z_size = 1
+x_units = m
+y_units = m
+z_units = m
+x_label = x-axis
+y_label = y-axis
+z_label = z-axis
+input_units = AU
+
+[cartesian]
+field = CartesianHomogeneous
+
+[SEP]
+include_antiparallel_alfven_waves = no
+include_parallel_alfven_waves = yes
+propagate_alfven_waves = no
+alfven_wave_growth = yes
+alfven_wave_growth_antiparallel = yes
+alfven_wave_growth_parallel = yes
+scatter_particles = yes
+scatter_particles_antiparallel = yes
+scatter_particles_parallel = yes
+setup_time = 0.0
+timestep_recalculate_interval = 100
+timestep_particle_factor = 1.0
+timestep_maximum = 1
+shock_name =
+parallel_wavelength_scaler = none
+antiparallel_wavelength_scaler = none
+max_scattering_delta_mu = 0.0325
+#max_scattering_delta_mu = 0.065
+lambda0 = 1000.0
+particle_splitter = ParticleSplitter
+
+[ParticleSplitter]
+high_energy_splitter.splits = 5
+high_energy_splitter.min_energy = 0.0001
+high_energy_splitter.min_macroparticles = 1
+
+[WavelengthMesh]
+lambda_min = -1e9
+lambda_max = +1e9
+#mesh_type = linear
+mesh_type = logarithmic
+size = 60
+
+[CartesianHomogeneous]
+B_magnitude = 1e-7
+B_x = +1.0
+B_y = 0.0
+B_z = 0.0
+#V_plasma_magnitude = 1500000.0
+V_plasma_magnitude = 0
+V_plasma_x = 1.0
+V_plasma_y = 0.0
+V_plasma_z = 0.0
+ion_number_density = 1.57e9
+#ion_number_density = 2.27125e10
+ion_mass = 1.0
+ion_polytropic_index = 1.666667
+ion_temperature = 1.0e6
+
+[DataOperatorExcludes]
+exclude_list = ShockMeshElectrons
+#exclude_list = SpatialLineoutEnergySpectrum
+exclude_list = EnergyChannels
+#exclude_list = DifferentialFlux
+#exclude_list = MeanFreePath
+
+[ReducedScalar]
+slice_index = 10
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+variable = waveGrowth
+
+[SpatialLineoutOperator]
+lineout_coordinate = x
+lineout_origin_x = 0.0
+lineout_origin_y = 0.0
+lineout_origin_z = 0.0
+
+[DifferentialFluxOperator]
+normal_x = +1.0
+normal_y = 0.0
+normal_z = 0.0
+instrument_names = ACE_ULEIS
+
+ACE_ULEIS.energy_units = MeV
+ACE_ULEIS.energy_per_amu = yes
+ACE_ULEIS.divide_by_bin_width = yes
+ACE_ULEIS.bin_width_units = MeV
+ACE_ULEIS.energy_limits = 0.000 0.088
+ACE_ULEIS.energy_limits = 0.088 0.160
+ACE_ULEIS.energy_limits = 0.160 0.320
+ACE_ULEIS.energy_limits = 0.320 0.640
+ACE_ULEIS.energy_limits = 0.640 1.280
+ACE_ULEIS.energy_limits = 1.280 2.560
+ACE_ULEIS.energy_limits = 2.560 7.240
+ACE_ULEIS.energy_limits = 48.1 48.3
+ACE_ULEIS.channel_names = A
+ACE_ULEIS.channel_names = B
+ACE_ULEIS.channel_names = 1
+ACE_ULEIS.channel_names = 2
+ACE_ULEIS.channel_names = 3
+ACE_ULEIS.channel_names = 4
+ACE_ULEIS.channel_names = 5
+ACE_ULEIS.channel_names = 6
+ACE_ULEIS.species_names = Proton
+
+[EnergySpectrumLineout]
+bins = 30
+energy_min = 1.0
+energy_max = 10000.0
+energy_units = keV
+
+[SpatialSliceOperator]
+slices = 3
+sliced_coordinate = z
+sliced_coordinate = x
+sliced_coordinate = y
+slice_origin = 1.0
+slice_origin = 1.0
+slice_origin = 1.0
+slice_geometry = cartesian
+slice_geometry = cartesian
+slice_geometry = cartesian
+
+[WavelengthMeshVariables]
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+variable = waveGrowth
+variable = antiparWaveGrowth
+variable = parWaveGrowth
+
+[WavelengthMeshParticleOperator]
+all_species = yes
+species = Proton
+
+[AlfvenMeshAP]
+direction = -1
+#injector.name = LagrInjectorHomog
+#injector.parameters = AlfvenInjector
+injector.name = LagrInjectorDefault
+injector.parameters = AlfvenInjectorAP
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenMesh]
+direction = +1
+injector.name = LagrInjectorDefault
+injector.parameters = AlfvenInjector
+accumulator.name = LagrAccumulator
+accumulator.parameters =
+propagator.name = LagrPropagator
+propagator.parameters =
+boundary_condition.name = LagrBoundaryCondRemove
+boundary_condition.parameters =
+
+[AlfvenInjector]
+macroparticles_per_cell = 1
+initial_injection = yes
+inflow_boundary_injection = yes
+energy_spectrum = PowerLaw
+energy_spectrum_parameters = AlfvenSpectrumPar
+resolution_lambda = 2
+
+[AlfvenInjectorAP]
+macroparticles_per_cell = 1
+initial_injection = yes
+inflow_boundary_injection = no
+energy_spectrum = PowerLaw
+energy_spectrum_parameters = AlfvenSpectrumAntipar
+
+[AlfvenSpectrumPar]
+relative_energy_L = 1e-1
+relative_energy_R = 1e-1
+spectral_index_L = 1.6667
+spectral_index_R = 1.6667
+ref_resonant_energy_L = 1.0
+ref_resonant_energy_R = 1.0
+max_resonant_energy_L = 1e15
+max_resonant_energy_R = 1e15
+
+[AlfvenSpectrumAntipar]
+relative_energy_L = 1e-3
+relative_energy_R = 1e-3
+spectral_index_L = 1.66667
+spectral_index_R = 1.66667
+ref_resonant_energy_L = 1.0
+ref_resonant_energy_R = 1.0
+max_resonant_energy_L = 1e15
+max_resonant_energy_R = 1e15
+
+[Proton]
+mass = 1.0
+charge = 1.0
+injector.name = IonInjectorHomog
+#injector.name = IonInjectorCell
+injector.parameters = ProtonInjector
+accumulator.name = IonAccumulator
+accumulator.parameters =
+propagator.name = ParticlePropagator
+propagator.parameters =
+boundary_condition.name = IonBoundaryCondRemove
+boundary_condition.parameters =
+
+[ProtonInjector]
+energy_distribution = mono
+energy_distribution_parameters = ProtonEnergyDistribution
+pitch_distribution = mono
+pitch_distribution_parameters = ProtonPitchDistribution
+macroparticles_per_cell = 100
+number_density = 16.08e2
+position_x = 1.0
+position_y = 1.0
+position_z = 1.0
+inflow_boundary = -x
+initial_injection = yes
+injection_frame = parallel
+
+[ProtonEnergyDistribution]
+injection_energy = 86.2
+units = keV
+
+[ProtonPitchDistribution]
+injection_pitch = 1.0

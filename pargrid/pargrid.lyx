@@ -1,0 +1,1162 @@
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+ParGrid Basics
+\end_layout
+
+\begin_layout Section
+Parallel Mesh
+\end_layout
+
+\begin_layout Standard
+Computational meshes are often Cartesian rectangular cuboids (
+\begin_inset Quotes eld
+\end_inset
+
+shoeboxes
+\begin_inset Quotes erd
+\end_inset
+
+), although this needs not be the case.
+ In parallel simulations the mesh (simulation domain) is somehow partitioned
+ (decomposed) amongst 
+\begin_inset Formula $N$
+\end_inset
+
+ processes.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+ shows an example of mesh partitioning in two-dimensional case.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename partitioning.png
+	width 90text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Left) Example of mesh partitioning to four processes (colours).
+ Right) Processes need to allocate buffer cells (uncoloured) for cells stored
+ on other processes.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:partitioning"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In parallel simulations it is perhaps easiest to think of cells that are
+ connected to other cells
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note: 
+\begin_inset Quotes eld
+\end_inset
+
+cell
+\begin_inset Quotes erd
+\end_inset
+
+ here should be understood as the smallest unit of parallelization.
+ Parallel cell may actually represent a small Cartesian patch/block of cells.
+\end_layout
+
+\end_inset
+
+ instead of a mesh.
+ For example, in Cartesian mesh each cell is connected to eight surrounding
+ cells in two-dimensional case, and 26 cells in three-dimensional case (Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cell-connectivity"
+
+\end_inset
+
+).
+ Some of the neighbouring cells are local to the process, the rest are remote
+ neighbours hosted on other process(es) (uncoloured cells in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+).
+ Some of the neighbours may not exists -- the cells at the boundary of the
+ simulation domain have one or more missing neighbours.
+ Cells with at least one missing neighbour are often flagged as 
+\begin_inset Quotes eld
+\end_inset
+
+ghost cells
+\begin_inset Quotes erd
+\end_inset
+
+ (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+In ParGrid parlance ghost cells are called 
+\series bold
+exterior cells
+\series default
+, while cells whose neighbours exist are called 
+\series bold
+interior cells
+\series default
+.
+ Each process has zero or more 
+\series bold
+local cells
+\series default
+ (coloured cells in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+), and keeps a copy of necessary amount of 
+\series bold
+remote cells
+\series default
+ (uncoloured cells in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+).
+ Each process considers processes that host one or more remote neighbours
+ as their 
+\series bold
+neighbouring processes
+\series default
+.
+ For example, in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:partitioning"
+
+\end_inset
+
+ red and orange processes consider blue and green processes as their neighbourin
+g processes.
+ Red and orange process are not neighbours.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename cell_connectivity.png
+	width 20text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename fdm_example.png
+	width 20text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Left) Each cell is connected to eight (26) cells in two(three)-dimensional
+ case.
+ Some of the neighbours may not exist.
+ Right) In finite difference advection equation data on marked (face)neighbours
+ are needed to propagate the gray cell.
+ The required cell data defines the transfer stencil of this particular
+ algorithm.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cell-connectivity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Cells are identified by unique 
+\series bold
+global ID
+\series default
+ numbers, i.e.
+ all processes agree on these numbers.
+ For example, in a regular Cartesian grid cells are identified by their
+ 
+\begin_inset Formula $(i,j,k)$
+\end_inset
+
+ indices.
+ Each 
+\begin_inset Formula $(i,j,k)$
+\end_inset
+
+ tuple corresponds to a unique value (index into an array
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+In C/C++ index = k*ysize*xsize+j*xsize+i.
+\end_layout
+
+\end_inset
+
+), which can be used as global IDs.
+ In ParGrid processes are only aware of their local cells, and of local
+ cells' neighbours, some of which reside on other processes.
+ Each process stores the cells (and associated data) in regular arrays that
+ are accessed with 
+\series bold
+local IDs
+\series default
+; local IDs are simply indices into arrays.
+ There is also a mapping between local and global IDs.
+ Usually one only needs to care about the local IDs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename neighbours.png
+	width 3cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+In ParGrid the neighbour type IDs are indices into a 
+\begin_inset Formula $3\times3\times3$
+\end_inset
+
+ block of cells, centered at the considered cell (drawn in black).
+ Type ID is calculated as 
+\begin_inset Formula $\mathrm{k}\cdot9+\mathrm{j}\cdot3+\mathrm{i}$
+\end_inset
+
+, where (i,j,k) are the indices starting from the bottom lower left corner.
+ The considered cell has indices (1,1,1), corresponding to neighbour type
+ ID 13.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:neighbour type IDs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In order to correctly identify neighbour cells each cell has a neighbour
+ list, which is an array of size 27
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The size of neighbour list is defined in 
+\family typewriter
+\size scriptsize
+pargrid::N_neighbours
+\size footnotesize
+.
+\end_layout
+
+\end_inset
+
+ that lists the local IDs of its neighbours
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+ParGrid only stores cells' immediate neighbours.
+ If one needs data from more distant neighbours, then each (parallel) cell
+ must contain a patch/block of cells.
+\end_layout
+
+\end_inset
+
+.
+ Neighbours' local IDs are stored in particular order that tells which of
+ the 27 cells the local ID refers to (see Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:neighbour type IDs"
+
+\end_inset
+
+)
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+A cell is also considered to be its own neighbour.
+\end_layout
+
+\end_inset
+
+.
+ The indices into neighbour list can be computed with 
+\family typewriter
+\size footnotesize
+pargrid::calcNeighbourTypeID
+\family default
+\size default
+ method that, instead of (i,j,k) index of the neighbour, takes the offset
+ relative to the cell in question as parameters.
+ For example, -x neighbour has offset 
+\begin_inset Formula $(-1,0,0)$
+\end_inset
+
+, and +x,+y,+z neighbour has offset 
+\begin_inset Formula $(+1,+1,+1)$
+\end_inset
+
+.
+ A non-existing neighbour has local ID (and global ID) value equal to 
+\family typewriter
+\size footnotesize
+pargrid::invalidCellID()
+\family default
+\size default
+.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:accessing neighbours"
+
+\end_inset
+
+ shows how neighbour local IDs are obtained with ParGrid.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\scriptsize\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+// Get neighbours of a cell with local ID localID
+\end_layout
+
+\begin_layout Plain Layout
+
+const pargrid::CellID* const nbrs = pargrid.getCellNeighbourIDs(localID);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Get local ID of (-1,0,0) neighbour
+\end_layout
+
+\begin_layout Plain Layout
+
+pargrid::CellID nbrID = nbrs[pargrid.calcNeighbourTypeID(-1,0,0)];
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Example of how to access cell's neighbour(s).
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:accessing neighbours"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before discussing data defined on cells let's consider a particular (bad)
+ implementation of two-dimensional advection equation 
+\begin_inset Formula $\partial_{t}f+\mathbf{V}\cdot\nabla f=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\frac{f_{i,j}^{n+1}-f_{i,j}^{n}}{\Delta t}=-V_{x}\frac{f_{i+1,j}^{n}-f_{i-1,j}^{n}}{2\Delta x}-V_{y}\frac{f_{i,j+1}^{n}-f_{i,j-1}^{n}}{2\Delta y}.\end{equation}
+
+\end_inset
+
+Here 
+\begin_inset Formula $n$
+\end_inset
+
+ refers to the time step, and 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ are cell indices in a Cartesian mesh.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cell-connectivity"
+
+\end_inset
+
+ (right panel) illustrates the neighbour data that are needed to propagate
+ a cell forward in time.
+ In this example only the four out of eight neighbours are needed.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cell-connectivity"
+
+\end_inset
+
+ (right panel) defines the 
+\series bold
+stencil
+\series default
+ of this algorithm -- in order to solve the gray cell correctly, the data
+ on the marked cells must be up-to-date, i.e.
+ in sync with neighbouring processes.
+ It is usually quite inefficient to sync data on all neighbours if only,
+ say, face neighbours are needed.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:stencil-definition"
+
+\end_inset
+
+ shows how one can define a new stencil with ParGrid
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+ParGrid always has one stencil with ID 0 (zero) that transfers all data.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\scriptsize\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+// define cells whose data needs to be received
+\end_layout
+
+\begin_layout Plain Layout
+
+vector<pargrid::NeighbourID> nbrTypeIDs;
+\end_layout
+
+\begin_layout Plain Layout
+
+nbrTypeIDs.push_back(pargrid.calcNeighbourTypeID(-1,0,0));
+\end_layout
+
+\begin_layout Plain Layout
+
+nbrTypeIDs.push_back(pargrid.calcNeighbourTypeID(+1,0,0));
+\end_layout
+
+\begin_layout Plain Layout
+
+nbrTypeIDs.push_back(pargrid.calcNeighbourTypeID(0,-1,0));
+\end_layout
+
+\begin_layout Plain Layout
+
+nbrTypeIDs.push_back(pargrid.calcNeighbourTypeID(0,+1,0));
+\end_layout
+
+\begin_layout Plain Layout
+
+int stencilID = 
+\end_layout
+
+\begin_layout Plain Layout
+
+        pargrid.addStencil(pargrid::localToRemoteUpdates,nbrTypeIDs);
+\end_layout
+
+\begin_layout Plain Layout
+
+if (newStencilID < 0) cerr << "ERROR" << endl;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Example of how to define a (transfer) stencil with ParGrid.
+ Here only data on x/y face neighbours is to be synchronized.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:stencil-definition"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+How to define cell data? In ParGrid there are two approaches to this, old
+ and new.
+ If possible one should use the (new) method described here.
+ Typically one need several data values per cell.
+ For example, in hydrodynamical simulations 
+\begin_inset Formula $(\rho,\rho v_{x},\rho v_{y},\rho v_{z},U)$
+\end_inset
+
+ need to be stored, i.e.
+ five floating point values per cell.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:user data definition"
+
+\end_inset
+
+ shows an example how to define parallel data arrays with ParGrid.
+ Note that it is entirely up to the user how the data should be understood,
+ i.e.
+ is the data stored as cell average, or on particular cell node/face/edge.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\scriptsize\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+// Define a double data array that has five values per cell
+\end_layout
+
+\begin_layout Plain Layout
+
+string name = "hydro";
+\end_layout
+
+\begin_layout Plain Layout
+
+unsigned int userDataID = pargrid.addUserData<double>(name,5);
+\end_layout
+
+\begin_layout Plain Layout
+
+if (userDataID == pargrid.invalidDataID())
+\end_layout
+
+\begin_layout Plain Layout
+
+	cerr << "ERROR" << endl;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Two ways to access the user data
+\end_layout
+
+\begin_layout Plain Layout
+
+char* ptr1 = pargrid.getUserData(userDataID);
+\end_layout
+
+\begin_layout Plain Layout
+
+char* ptr2 = pargrid.getUserData(name);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Set values for data on cell with local ID localID
+\end_layout
+
+\begin_layout Plain Layout
+
+double* data = reinterpret_cast<double*>(ptr1);
+\end_layout
+
+\begin_layout Plain Layout
+
+data[localID*5+0] = rho;
+\end_layout
+
+\begin_layout Plain Layout
+
+data[localID*5+1] = rhovx;
+\end_layout
+
+\begin_layout Plain Layout
+
+data[localID*5+2] = rhovy;
+\end_layout
+
+\begin_layout Plain Layout
+
+data[localID*5+3] = rhovz;
+\end_layout
+
+\begin_layout Plain Layout
+
+data[localID*5+4] = energy;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Example of how to define parallel data arrays with ParGrid.
+ The example also shows how to access the created arrays.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:user data definition"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Definition of stencil or data arrays is not enough to make the magic happen.
+ One also needs to tell ParGrid which stencil(s) are used to transfer the
+ data array(s)
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+It is also possible to sync the same data array using several different
+ stencils.
+\end_layout
+
+\end_inset
+
+.
+ This is done by adding 
+\series bold
+transfers
+\series default
+ to ParGrid.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\scriptsize\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+unsigned int transferID = 3;
+\end_layout
+
+\begin_layout Plain Layout
+
+bool result 
+\end_layout
+
+\begin_layout Plain Layout
+
+   = pargrid.addUserDataTransfer(userDataID,stencilID,transferID,false);
+\end_layout
+
+\begin_layout Plain Layout
+
+if (result == false) cerr << "ERROR" << endl;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Example of how to connect a user-defined parallel data array to a stencil.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:transfer"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Cells whose every neighbour in the stencil are local are called 
+\series bold
+inner cells
+\series default
+.
+ Cells that have remote neighbours in the stencil are called 
+\series bold
+boundary cells
+\series default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Unfortunately English language has quite limited vocabulary in this matter.
+\end_layout
+
+\end_inset
+
+.
+ Boundary cells cannot be propagated until the data on (local copies of)
+ remote cells has been synchronized with neighbouring processes.
+ Typically one first starts the neighbour data sync, propagates inner cells
+ while waiting for sync to complete, and finally propagates boundary cells.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:propagation loop"
+
+\end_inset
+
+ shows how this is done with ParGrid.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\scriptsize\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+// Start data sync //
+\end_layout
+
+\begin_layout Plain Layout
+
+pargrid.startNeighbourExchange(stencilID,transferID);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Propagate inner cells //
+\end_layout
+
+\begin_layout Plain Layout
+
+const vector<pargrid::CellID>& innerCells 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         = pargrid.getInnerCells(stencilID);
+\end_layout
+
+\begin_layout Plain Layout
+
+for (size_t c=0; c<innerCells.size(); ++c) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	//** propagate cell with local ID innerCells[c] **//
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Wait for data sync to complete //
+\end_layout
+
+\begin_layout Plain Layout
+
+pargrid.wait(stencilID,transferID);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// Propagate boundary cells //
+\end_layout
+
+\begin_layout Plain Layout
+
+const vector<pargrid::CellID>& boundaryCells
+\end_layout
+
+\begin_layout Plain Layout
+
+                         = pargrid.getBoundaryCells(stencilID);
+\end_layout
+
+\begin_layout Plain Layout
+
+for (size_t c=0; c<boundaryCells.size(); ++c) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	//** propagate cell with local ID boundaryCells[c] **//
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Example of how to start neighbour data sync, and how to propagate inner
+ and boundary cells.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:propagation loop"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Desing Considerations
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+old
+\begin_inset Quotes erd
+\end_inset
+
+ way to define cell data is basically what one does as a first approximation:
+ the cell data is defined in a header file which needs to be included everywhere.
+ This presents a problem for code coupling and reusability.
+ For example, let's consider an MHD simulation, and a particle simulation
+ that basically just requires 
+\begin_inset Formula $\mathbf{E},\mathbf{B}$
+\end_inset
+
+-field to propagate the particles.
+ Both codes are useful as they are, but it might be useful to couple them
+ in some applications which presents some non-trivial issues.
+ With data arrays defined above there is no need for header files that define
+ cell data.
+ The names of the data files, which are defined runtime, can be read from
+ configuration file.
+\end_layout
+
+\end_body
+\end_document

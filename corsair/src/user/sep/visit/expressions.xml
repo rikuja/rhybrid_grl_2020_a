@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<Object name="ExpressionList">
+    <Object name="Expression">
+        <Field name="name" type="string">ElectronDistribMesh/distrib_total</Field>
+        <Field name="definition" type="string">\<ElectronDistribMesh/distrib_thermal\>+\<ElectronDistribMesh/distrib_refl\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">ElectronDistribMesh/log10_distrib_total</Field>
+        <Field name="definition" type="string">log10(\<ElectronDistribMesh/distrib_thermal\>+\<ElectronDistribMesh/distrib_refl\>+1e-7)</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">ElectronDistribMesh/log10_distrib_thermal</Field>
+        <Field name="definition" type="string">log10(\<ElectronDistribMesh/distrib_thermal\>+1e-7)</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">ElectronDistribMesh/log10_distrib_refl</Field>
+        <Field name="definition" type="string">log10(\<ElectronDistribMesh/distrib_refl\>+1e-14)</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">shock/cos_obliquity</Field>
+        <Field name="definition" type="string">"dot(\<shock/B_shock\>,\<shock/surface_normal\>) / magnitude(\<shock/B_shock\>)"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">shock/Mach_sonic2</Field>
+        <Field name="definition" type="string">\<shock/Mach_sonic\>*\<shock/Mach_sonic\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">shock/Mach_Alfvenic2</Field>
+        <Field name="definition" type="string">\<shock/Mach_Alfvenic\>*\<shock/Mach_Alfvenic\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">SpatialGrid/Proton_Anisotropy</Field>
+        <Field name="definition" type="string">\<SpatialGrid/anisotropy2\>/\<SpatialGrid/density2\>/\<SpatialGrid/CellVolume\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">SpatialGrid/B0_energy_density</Field>
+        <Field name="definition" type="string">0.5*magnitude(\<SpatialGrid/B\>)*magnitude(\<SpatialGrid/B\>)/1.256e-6</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">SpatialGrid/waves/Relative_Energy_Parallel</Field>
+        <Field name="definition" type="string">\<SpatialGrid/waves/EnergyDens_Parallel\>/\<SpatialGrid/B0_energy_density\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh2/I_par</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh2/parAlfven\> / \<WaveMesh2/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh2/I_antipar</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh2/antiparAlfven\> / \<WaveMesh2/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/I_par</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh0/parAlfven\> / \<WaveMesh0/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/I_antipar</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh0/antiparAlfven\> / \<WaveMesh0/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">SpatialGrid/plasmaNumberDensity</Field>
+        <Field name="definition" type="string">"\<SpatialGrid/mass_density\> / 1.673e-27"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">SpatialGrid/waves/Relative_Energy_AntiParallel</Field>
+        <Field name="definition" type="string">\<SpatialGrid/waves/EnergyDens_Antiparallel\>/\<SpatialGrid/B0_energy_density\></Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/dI_antipar</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh0/antiparWaveGrowth\> / \<WaveMesh0/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/dI_par</Field>
+        <Field name="definition" type="string">"1.256e-6 * \<WaveMesh0/parWaveGrowth\> / \<WaveMesh0/phaseSpaceVolume\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/dI_par_rel</Field>
+        <Field name="definition" type="string">"\<WaveMesh0/dI_par\> / \<WaveMesh0/I_par\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+    <Object name="Expression">
+        <Field name="name" type="string">WaveMesh0/dI_antipar_rel</Field>
+        <Field name="definition" type="string">"\<WaveMesh0/dI_antipar\> / \<WaveMesh0/I_antipar\>"</Field>
+        <Field name="hidden" type="bool">false</Field>
+        <Field name="type" type="string">ScalarMeshVar</Field>
+        <Field name="fromDB" type="bool">false</Field>
+        <Field name="fromOperator" type="bool">false</Field>
+        <Field name="operatorName" type="string">__none__</Field>
+        <Field name="meshName" type="string"></Field>
+        <Field name="dbName" type="string">__none__</Field>
+        <Field name="autoExpression" type="bool">false</Field>
+    </Object>
+</Object>

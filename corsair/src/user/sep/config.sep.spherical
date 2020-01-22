@@ -1,0 +1,131 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00000100.vlsv
+
+[Simulation]
+time_initial = 0.0
+timesteps = 1000
+dt = 10.0
+data_save_interval = 100
+data_save_interval_unit = timestep
+particle.species = Proton
+maximum_load_imbalance = 1.2
+repartition_check_interval = 0
+random_number_generator.seed = 0
+restart_write_interval = 0
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+#restart = yes
+mesh_always_written = yes
+
+[LoadBalance]
+methods = BLOCK
+#methods = RANDOM
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = spherical
+x_periodic = no
+y_periodic = no
+z_periodic = yes
+x_min = +0.1
+y_min = +1.483496327
+z_min = -1.570796327
+x_max = +2.6
+y_max = +1.658096327
+z_max = +1.570796327
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+x_size = 50
+y_size = 3
+z_size = 50
+x_units = m
+y_units = m
+z_units = m
+x_label = r-axis
+y_label = theta-axis
+z_label = phi-axis
+input_units = AU
+
+[SEP]
+propagate_alfven_waves = no
+alfven_wave_growth = no
+scatter_particles = no
+
+[spherical]
+field = SphericalRadial
+#field = SphericalParker
+
+[WavelengthMesh]
+lambda_min = -10000.0
+lambda_max = +10000.0
+cell_spacing = uniform
+size = 41
+
+[SphericalRadial]
+B_reference = 5.0e-9
+V_radial_sw = 430000.0
+mass_density = 1.1711e-20
+
+[SphericalParker]
+B_reference = 5.0e-9
+V_radial_sw = 430000.0
+mass_density = 1.1711e-20
+
+[WavelengthMeshOperator]
+slices = 3
+sliced_coordinate = z
+sliced_coordinate = x
+sliced_coordinate = y
+slice_origin = 1.0
+slice_origin = 1.0
+slice_origin = 1.0
+
+[ReducedScalar]
+slice_index = 0
+
+[WavelengthMeshVariables]
+variable = particleWeight4D
+variable = antiparAlfven
+variable = parAlfven
+variable = waveGrowth
+
+[AlfvenMeshAP]
+direction = -1
+injector = AlfvenInjector
+accumulator =
+propagator =
+
+[AlfvenMesh]
+direction = +1
+injector = AlfvenInjector
+accumulator =
+propagator =
+
+[AlfvenInjector]
+macroparticles_per_cell = 1
+
+[Proton]
+mass = 1.0
+charge = 1.0
+injector = ProtonInjector
+accumulator =
+propagator =
+
+[ProtonInjector]
+energy_distribution = mono
+energy_distribution_parameters = ProtonEnergyDistribution
+pitch_distribution = mono
+pitch_distribution_parameters = ProtonPitchDistribution
+macroparticles_per_cell = 1
+number_density = 1e6
+
+[ProtonEnergyDistribution]
+injection_energy = 10.0
+units = keV
+
+[ProtonPitchDistribution]
+injection_pitch = 0.0

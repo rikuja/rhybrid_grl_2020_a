@@ -1,0 +1,65 @@
+gridbuilder = LogicallyCartesian
+
+[Restart]
+filename = restart00005000.vlsv
+
+[Simulation]
+time_initial = 0.0
+maximum_timesteps = 10000
+dt = 0.08
+data_save_interval = 1000
+data_save_interval_unit = timestep
+particle.species =
+maximum_load_imbalance = 1.2
+repartition_check_interval = 500
+restart_write_interval = 5000
+restart_major_store_interval = 0
+restart_minor_store_amount = 0
+#restart = yes
+mesh_always_written = yes
+random_number_generator.seed = 0
+
+[LoadBalance]
+methods = RCB
+tolerances = 1.05
+processes_per_partition = 2
+
+[LogicallyCartesian]
+geometry = cartesian
+x_periodic = yes
+y_periodic = yes
+z_periodic = yes
+x_min = -382260000.0
+y_min = -382260000.0
+z_min = -382260000.0
+x_max = +382260000.0
+y_max = +382260000.0
+z_max = +382260000.0
+dx_uniform = yes
+dy_uniform = yes
+dz_uniform = yes
+x_size = 24
+y_size = 24
+z_size = 24
+x_units = m
+y_units = m
+z_units = m
+x_label = x-axis
+y_label = y-axis
+z_label = z-axis
+
+[DataOperatorExcludes]
+exclude_list = 
+
+[OperatorPargridData]
+array_pargrid_name = avgs
+array_pargrid_name = flux
+array_output_name = scalars/volumeAverage
+array_output_name = scalars/flux
+array_units = 
+array_units = 1/m^2/s
+
+[Advection]
+velocity_x = 40000.0
+velocity_y = 40000.0
+velocity_z = 40000.0

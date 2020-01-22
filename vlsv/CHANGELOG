@@ -1,0 +1,75 @@
+****************************
+***** VERSION 1.100.10 *****
+****************************
+
+vlsv::Writer and vlsv::ParallelReader were modified to work with very
+large arrays (size roughly exceeding 2^31-1 bytes).
+
+This version number refers to a Github commit. The revision numbers 
+below refer to earlier Subversion commits.
+
+*************************************
+***** CHANGES IN REVISION 00842 *****
+*************************************
+
+MINOR
+
+Added more VTK cell types to VLSV headers and to Visit generic
+unstructured mesh plugin.
+
+Changed some tab intendations to whitespace ones.
+
+*************************************
+***** CHANGES IN REVISION 00401 *****
+*************************************
+
+MINOR
+
+Changed namespace VLSV to vlsv to be in line with coding style used
+elsewhere. Also changed couple class names.
+
+Mesh types, datatypes, and coordinate systems are now inside nested
+namespaces. This prevented some name clashes.
+
+Abovementioned changes had to be made in plugin as well.
+
+*************************************
+***** CHANGES IN REVISION 00386 *****
+*************************************
+
+VLSV reader was split into two files - one for sequential and one for
+parallel (MPI) reader class. Sequential reader does not need
+mpi-related headers etc. to compile which helps to avoid issues when
+including VLSV headers.
+
+Class MuXML had to be hidden inside namespace muxml because of
+typename clash with headers that VisIt includes.
+
+All files required by VLSVReader class have to be compiled with -fPIC
+switch so that compiler can include them in shared library.
+
+Corrected a typo in vlsv_reader.h header -- readArray function takes 
+'begin' and 'amount' as parameters, not 'begin' and 'end'.
+
+Added a 'read' convenience function which automatically converts read
+data into given datatype.
+
+First version of VisIt VLSV plugin is now ready.
+
+Changed filenames.
+
+*************************************
+***** CHANGES IN REVISION 00284 *****
+*************************************
+
+Cleaned up code in vlsvwriter2.cpp and vlsvreader2.cpp as well as in
+the associated headers. General-use functions have been templatized
+and moved to vlsv_common.h
+
+VLSVParReader now works after several bug fixes.
+
+Makefile was updated so that architecture-dependent flags etc. are
+read from user-dependent Makefile.ARCH files. As a result VLSV library
+needs to be compiled with
+>make "ARCH=arch"
+command, where 'arch' is the suffix of the architecture file.

@@ -1,0 +1,17 @@
+##############################################
+###         ARCHITECTURE-DEPENDENT         ###
+### MAKEFILE FOR VLSV PARALLEL FILE FORMAT ###
+###                                        ###
+###    Make a copy of this file and edit   ###
+###     include and library paths below    ###
+##############################################
+
+#CMP=CC
+CMP=mpic++
+CXXFLAGS=-O3 -DMPICH_IGNORE_CXX_SEEK -std=c++0x -Wall
+FLAGS=
+
+INC_SILO=
+LIB_SILO=
+
+AR = ar

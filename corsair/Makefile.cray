@@ -1,0 +1,35 @@
+# C++ compiler and flags
+#CMP=cc
+CMP=mpic++
+CXXFLAGS=-O3 -Wall -DPROFILE -std=c++0x -DNDEBUG
+MATHFLAGS=-ffast-math -funroll-loops
+
+# Archiver
+AR = ar
+
+# Linker and flags
+#LNK=CC
+LNK=mpic++
+
+###### Library include and lib paths #####
+
+# Miscellaneous files:
+INC=
+
+# Boost
+#INC_BOOST=-I$(CRAY_TRILINOS_PREFIX_DIR)/include
+#LIB_BOOST=-L$(CRAY_TRILINOS_PREFIX_DIR)/lib -lboost_program_options
+INC_BOOST=-I/usr/include/boost
+LIB_BOOST=-L/usr/lib/ -lboost_program_options
+
+# ParGrid
+INC_PARGRID=-I$(HOME)/bin/pargrid
+LIB_PARGRID=
+
+# VLSV file format
+INC_VLSV=-I$(HOME)/bin/vlsv
+LIB_VLSV=-L$(HOME)/bin/vlsv -lvlsv
+
+# Zoltan
+INC_ZOLTAN=-I$(HOME)/bin/Zoltan_v3.6/build/include
+LIB_ZOLTAN=-L$(HOME)/bin/Zoltan_v3.6/build/lib -lzoltan
